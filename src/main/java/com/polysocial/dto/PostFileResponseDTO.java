@@ -1,9 +1,10 @@
 package com.polysocial.dto;
 
-import java.util.List;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.polysocial.entity.Users;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,14 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ListPostDTO {
+public class PostFileResponseDTO {
 
-    private int page;
-    
-    private int totalItem;
-
-    private int totalPage;
-
-    private List<PostResponseDTO> listPostDTO;
-    
+    private String urlFile;
 }

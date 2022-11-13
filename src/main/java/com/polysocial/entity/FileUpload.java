@@ -2,7 +2,7 @@ package com.polysocial.entity;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class Files {
+public class FileUpload {
     
     private MultipartFile fi;
 

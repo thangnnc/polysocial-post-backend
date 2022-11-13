@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Data
-
+@NoArgsConstructor
 @Entity
 public class Posts implements Serializable {
 
@@ -21,17 +21,17 @@ public class Posts implements Serializable {
 
     private String content;
 
-    private Date createdDate;
+    private LocalDateTime createdDate;
     
     private Long createdBy;
+    
+    @ManyToOne
+    @JoinColumn(name = "createdBy",referencedColumnName = "userId", insertable = false, updatable = false)
+    private Users user;
 
     private Long groupId;
     
     private Boolean status;
-
-    @ManyToOne
-    @JoinColumn(name = "createdBy", insertable = false, updatable = false)
-    private Users user;
 
     @ManyToOne
     @JoinColumn(name = "groupId", insertable = false, updatable = false)

@@ -3,14 +3,16 @@ package com.polysocial.rest.controller;
 import com.polysocial.consts.PostAPI;
 
 import com.polysocial.dto.PostDTO;
-import com.polysocial.dto.PostFileUploadDTO;
 import com.polysocial.dto.ResponseDTO;
 import com.polysocial.exception.PolySocialException;
 import com.polysocial.dto.ListPostDTO;
-import com.polysocial.service.PostFileService;
 import com.polysocial.service.PostService;
 import com.polysocial.utils.ValidateUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,44 +28,57 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 @CrossOrigin("*")
 @RestController
 public class PostController {
 
     @Autowired
     private PostService postService;
-    
-    @Autowired PostFileService postFileService;
+
+
     @GetMapping(PostAPI.API_GET_POST)
     public ResponseEntity getPost(@RequestParam("page") Optional<Integer> page,
             @RequestParam("limit") Optional<Integer> limit) {
-        ListPostDTO response = postService.findAllPage(page.orElse(0), limit.orElse(2));
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        ListPostDTO response = postService.findAllPage(page.orElse(0), limit.orElse(10));
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(PostAPI.API_GET_POST)
-    public ResponseEntity<ResponseDTO<PostDTO>> create(@RequestBody PostDTO request) {
-        try {
-            return ResponseEntity
-                    .ok(ResponseDTO.responseSuccess("OK", postService.save(request)));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(ResponseDTO.responseFail(e.getMessage()));
-        }
-
-    }
-
-    @PutMapping(PostAPI.API_PUT_DELETE)
-    public ResponseEntity<ResponseDTO<PostDTO>> update(@RequestBody PostDTO request, @PathVariable("id") long id) {
-        request.setPostId(id);
-        try {
-            return ResponseEntity
-                    .ok(ResponseDTO.responseSuccess("OK", postService.update(request)));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(ResponseDTO.responseFail(e.getMessage()));
+    public ResponseEntity create(@RequestBody PostDTO request) {
+        if (ValidateUtils.isNullOrEmpty(request.getContent())) {
+            ResponseDTO response = new ResponseDTO();
+            response.setStatus(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+        } else {
+            PostDTO response = postService.save(request);
+            return ResponseEntity.ok(response);
         }
     }
+    
+//    @PostMapping(PostAPI.API_UPLOADFILE_POST)
+//    public PostFileUploadDTO saveFile(@RequestParam(value = "file", required = false) MultipartFile fi) throws IOException {
+//        System.out.println("local");
+//        return postFileService.saveFile(fi);
+//    }
+    
+    @PostMapping(PostAPI.API_UPLOADFILE_POST)
+    public List<String> add(@RequestParam(value = "file", required = false) List<MultipartFile> fi) throws IOException {
+        return postService.saveFile(fi);
+    }
+
+    
+//    @PutMapping(PostAPI.API_PUT_DELETE)
+//    public ResponseEntity<ResponseDTO<PostDTO>> update(@RequestBody PostDTO request, @PathVariable("id") long id) {
+//        request.setPostId(id);
+//        try {
+//            return ResponseEntity
+//                    .ok(ResponseDTO.responseSuccess("OK", postService.update(request)));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.badRequest().body(ResponseDTO.responseFail(e.getMessage()));
+//        }
+//    }
 
 //    @DeleteMapping(value = PostAPI.API_PUT_DELETE)
 //    public ResponseEntity<ResponseDTO<PostDTO>> delete(@PathVariable("id") long id) {
@@ -75,9 +90,12 @@ public class PostController {
 //            return ResponseEntity.badRequest().body(ResponseDTO.responseFail(e.getMessage()));
 //        }
 //    }
-    @PostMapping("/upfile")
-    public PostFileUploadDTO saveFile(@RequestParam(value = "file", required = false) MultipartFile fi) throws PolySocialException {
-        return postFileService.saveFile(fi);
-    }
 
+//    @PostMapping(PostAPI.API_UPLOADFILE_POST)
+//    public PostFileUploadDTO saveFile(@RequestParam(value = "file", required = false) MultipartFile fi) {
+//        System.out.println("local");
+//        return postFileService.saveFile(fi);
+//    }
+    
+ 
 }

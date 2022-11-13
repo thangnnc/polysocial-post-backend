@@ -3,6 +3,8 @@ package com.polysocial.entity;
 import lombok.*;
 import org.hibernate.Hibernate;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -34,38 +36,47 @@ public class Users implements Serializable {
     private LocalDateTime createdDate;
 
     private Long roleId;
+ // close *******
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//    private List<Posts> posts;
 
-//    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+//    @JsonBackReference
+//    @ManyToOne
 //    @JoinColumn(name = "roleId", insertable = false, updatable = false)
 //    private Roles role;
 //
-//    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-//    private UserDetails userDetail;
+//    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+//    private UserDetail userDetail;
 //
+//    @JsonManagedReference
 //    @OneToMany(mappedBy = "userInvite", fetch = FetchType.LAZY)
 //    @ToString.Exclude
 //    private List<Friends> friendInvites;
 //
+//    @JsonManagedReference
 //    @OneToMany(mappedBy = "userConfirm", fetch = FetchType.LAZY)
 //    @ToString.Exclude
 //    private List<Friends> friendConfirms;
 //
+//    @JsonManagedReference
 //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 //    @ToString.Exclude
 //    private List<Notifications> notification;
 //
+//    @JsonManagedReference
 //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 //    @ToString.Exclude
 //    private List<Contacts> contacts;
 //
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    @ToString.Exclude
-//    private List<Posts> posts;
+    
 //
+//    @JsonManagedReference
 //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 //    @ToString.Exclude
 //    private List<Likes> likes;
 //
+//    @JsonManagedReference
 //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 //    @ToString.Exclude
 //    private List<Comments> comments;

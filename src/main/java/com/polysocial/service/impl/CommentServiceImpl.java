@@ -34,15 +34,17 @@ public class CommentServiceImpl implements CommentService {
     
     
     @Override
-    public CommentDTO save(CommentDTO dto) throws PolySocialException {
+    public CommentDTO save(CommentDTO dto)  {
         try {
             Comments comment = modelMapper.map(dto, Comments.class);
             comment.setCreatedDate(new Date());
+            comment.setStatus(true);
             commentRepository.save(comment);
             return dto;
         } catch (Exception e) {
-            throw new PolySocialException(PolySocialErrorCode.GENERAL);
+            e.printStackTrace();
         }
+        return null;
     }
     
     @Override
@@ -53,18 +55,18 @@ public class CommentServiceImpl implements CommentService {
     }
 
     
-    @Override
-    public CommentDTO update(CommentDTO dto) throws Exception {
-        try {
-            Optional<Comments> postByid = commentRepository.findById(dto.getCmtId());
-            Comments comment = modelMapper.map(postByid, Comments.class);
-            comment.setContent(dto.getContent());
-            commentRepository.save(comment);
-            return dto;
-        } catch (Exception e) {
-            throw new PolySocialException(PolySocialErrorCode.GENERAL);
-        }
-    }
+//    @Override
+//    public CommentDTO update(CommentDTO dto) throws Exception {
+//        try {
+//            Optional<Comments> postByid = commentRepository.findById(dto.getCmtId());
+//            Comments comment = modelMapper.map(postByid, Comments.class);
+//            comment.setContent(dto.getContent());
+//            commentRepository.save(comment);
+//            return dto;
+//        } catch (Exception e) {
+//            throw new PolySocialException(PolySocialErrorCode.GENERAL);
+//        }
+//    }
 
     @Override
     public CommentDTO deleteById(Long id) throws Exception {

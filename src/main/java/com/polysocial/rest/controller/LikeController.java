@@ -19,16 +19,16 @@ public class LikeController {
     @Autowired
     private LikeService likeService;
 
-    @PostMapping(LikeAPI.API_GET_POST_LIKE)
-    public ResponseEntity<ResponseDTO<LikeDTO>> like(@RequestBody LikeDTO request) {
-        try {
-            return ResponseEntity
-                    .ok(ResponseDTO.responseSuccess("OK", likeService.likeUnLike(request)));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(ResponseDTO.responseFail(e.getMessage()));
-        }
-
-    }
+//    @PostMapping(LikeAPI.API_GET_POST_LIKE)
+//    public ResponseEntity<ResponseDTO<LikeDTO>> like(@RequestBody LikeDTO request) {
+//        try {
+//            return ResponseEntity
+//                    .ok(ResponseDTO.responseSuccess("OK", likeService.likeUnLike(request)));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.badRequest().body(ResponseDTO.responseFail(e.getMessage()));
+//        }
+//
+//    }
 
 }

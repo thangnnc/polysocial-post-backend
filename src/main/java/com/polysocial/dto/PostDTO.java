@@ -25,21 +25,13 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PostDTO implements Serializable {
-
+    
     private Long postId;
-
+    
     private String content;
-
-    private Date createdDate;
 
     private Long createdBy;
 
     private Long groupId;
-    
-    private Long countLike;
-    
-    private Long countComment;
-    
-    private List<CommentDTO> listComment;
-}
 
+}

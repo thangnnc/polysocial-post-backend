@@ -23,6 +23,10 @@ public class PostFile implements Serializable {
     private String type;
 
     private LocalDateTime createdDate;
+    
+    private Boolean isActive;
+    
+    private Long postId;
 
     @ManyToOne
     @JoinColumn(name = "postId", insertable = false, updatable = false)

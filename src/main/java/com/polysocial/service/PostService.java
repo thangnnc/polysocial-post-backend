@@ -1,7 +1,9 @@
 package com.polysocial.service;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
 
 import com.polysocial.dto.ListPostDTO;
 import com.polysocial.dto.PostDTO;
@@ -10,8 +12,8 @@ public interface PostService {
 
     ListPostDTO findAllPage(Integer page, Integer limit);
 
-    PostDTO update(PostDTO dto) throws Exception;
+    PostDTO save(PostDTO dto);
 
-    PostDTO save(PostDTO dto) throws Exception;
+    List<String> saveFile(List<MultipartFile> fi) throws IOException;
 
 }

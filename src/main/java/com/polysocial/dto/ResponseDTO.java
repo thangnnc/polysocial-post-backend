@@ -1,20 +1,20 @@
 package com.polysocial.dto;
 
+import org.springframework.http.HttpStatus;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class ResponseDTO<T> {
-    private int code;
+public class ResponseDTO {
+    private Integer status;
 
     private String message;
 
-    private T data;
-
-    public int getCode() {
-        return code;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getMessage() {
@@ -25,51 +25,8 @@ public class ResponseDTO<T> {
         this.message = message;
     }
 
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
-
-    public ResponseDTO() {
-
-    }
-
-    @JsonIgnore
-    public static <T> ResponseDTO<T> responseSuccess(String message, T data) {
-        ResponseDTO result = new ResponseDTO();
-        result.code = 1;
-        result.message = message;
-        result.data = data;
-        return result;
-    }
-
-    @JsonIgnore
-    public static <T> ResponseDTO<T> responseFail(String message) {
-        ResponseDTO result = new ResponseDTO();
-        result.code = -1;
-        result.message = message;
-        result.data = null;
-        return result;
-    }
-
-    @JsonIgnore
-    public static <T> ResponseDTO<T> responseUnauthorized(String message) {
-        ResponseDTO result = new ResponseDTO();
-        result.code = 401;
-        result.message = message;
-        result.data = null;
-        return result;
-    }
-
-    @JsonIgnore
-    public static <T> ResponseDTO<T> responseForbidden(String message) {
-        ResponseDTO result = new ResponseDTO();
-        result.code = 403;
-        result.message = message;
-        result.data = null;
-        return result;
+    public void setStatus(HttpStatus httpStatus){
+        this.status = httpStatus.value();
+        this.message = httpStatus.name();
     }
 }
