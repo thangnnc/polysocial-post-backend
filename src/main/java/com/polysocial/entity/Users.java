@@ -36,6 +36,8 @@ public class Users implements Serializable {
     private LocalDateTime createdDate;
 
     private Long roleId;
+    
+    private String qrCode;
  // close *******
 //    @JsonManagedReference
 //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)

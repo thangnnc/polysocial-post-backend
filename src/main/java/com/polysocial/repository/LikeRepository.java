@@ -10,6 +10,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface LikeRepository extends JpaRepository<Likes, LikeId>{
     
-    @Query("SELECT COUNT(*) FROM Likes l WHERE l.postId=:postId")
+    @Query("SELECT COUNT(*) FROM Likes l WHERE l.postId=:postId AND status=1")
     Long countLike(@Param("postId") Long postId);
 }
