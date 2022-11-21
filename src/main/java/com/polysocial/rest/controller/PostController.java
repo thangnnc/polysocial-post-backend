@@ -56,46 +56,11 @@ public class PostController {
         }
     }
     
-//    @PostMapping(PostAPI.API_UPLOADFILE_POST)
-//    public PostFileUploadDTO saveFile(@RequestParam(value = "file", required = false) MultipartFile fi) throws IOException {
-//        System.out.println("local");
-//        return postFileService.saveFile(fi);
-//    }
     
     @PostMapping(PostAPI.API_UPLOADFILE_POST)
     public List<String> add(@RequestParam(value = "file", required = false) List<MultipartFile> fi) throws IOException {
         return postService.saveFile(fi);
     }
-
     
-//    @PutMapping(PostAPI.API_PUT_DELETE)
-//    public ResponseEntity<ResponseDTO<PostDTO>> update(@RequestBody PostDTO request, @PathVariable("id") long id) {
-//        request.setPostId(id);
-//        try {
-//            return ResponseEntity
-//                    .ok(ResponseDTO.responseSuccess("OK", postService.update(request)));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.badRequest().body(ResponseDTO.responseFail(e.getMessage()));
-//        }
-//    }
 
-//    @DeleteMapping(value = PostAPI.API_PUT_DELETE)
-//    public ResponseEntity<ResponseDTO<PostDTO>> delete(@PathVariable("id") long id) {
-//        try {
-//            return ResponseEntity
-//                    .ok(ResponseDTO.responseSuccess("OK", postService.deleteById(id)));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.badRequest().body(ResponseDTO.responseFail(e.getMessage()));
-//        }
-//    }
-
-//    @PostMapping(PostAPI.API_UPLOADFILE_POST)
-//    public PostFileUploadDTO saveFile(@RequestParam(value = "file", required = false) MultipartFile fi) {
-//        System.out.println("local");
-//        return postFileService.saveFile(fi);
-//    }
-    
- 
 }

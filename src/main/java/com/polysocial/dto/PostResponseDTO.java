@@ -31,6 +31,8 @@ public class PostResponseDTO implements Serializable {
     
     private Long countComment;
     
+    private Boolean status;
+    
     private List<CommentResponseDTO> listComment;
     
     private List<PostFileResponseDTO> listUrl;
