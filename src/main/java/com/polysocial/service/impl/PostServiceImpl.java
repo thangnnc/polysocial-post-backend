@@ -34,6 +34,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.aspectj.apache.bcel.generic.RET;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -75,8 +76,9 @@ public class PostServiceImpl implements PostService {
             for (Posts post : listPost) {
                 List<Comments> cm = commentRepository.findByPostId(post.getPostId());
                 List<PostFile> pf = postFileRepository.findByPostId(post.getPostId());
-                
+             
                 PostResponseDTO dto = modelMapper.map(post, PostResponseDTO.class);
+                
                 List<CommentResponseDTO> listCommentConver = new ArrayList<>();
                 
                 for (Comments comments : cm) {
@@ -97,7 +99,7 @@ public class PostServiceImpl implements PostService {
 //                }
                 dto.setCountLike(countLike);
                 dto.setCountComment(countComment);
-
+                dto.setStatus(post.getStatus());
                 listPostConver.add(dto);
 
             }
@@ -116,8 +118,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDTO save(PostDTO dto) {
         try {
-//            System.out.println("url-->" + url);
-//            System.out.println("type-->" + type);
             Posts post = modelMapper.map(dto, Posts.class);
             post.setCreatedDate(LocalDateTime.now());
             post.setStatus(true);
@@ -243,4 +243,37 @@ public class PostServiceImpl implements PostService {
             }
         }
     }
+    @Override
+	public PostDTO findById(Long postId) {
+    	try {
+    		Optional<Posts> postById = this.postRepository.findById(postId);
+        	if(postById.isPresent()) {
+        		throw new Exception();
+        	}
+        	PostDTO dto = modelMapper.map(postById, PostDTO.class);
+        	return dto;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return null;
+    }
+//    public Long deleteByIdPost(Long postId) {
+//    	try {
+//    	  	Optional<Posts> postById = this.postRepository.findById(postId);
+//        	if(postById.isPresent()) {
+//        		throw new Exception();
+//        	}
+//        	Posts post = postById.get();
+//        	if(post.getStatus()==false) {
+//        		throw new Exception();
+//        	}
+//        	post.setStatus(false);
+//        	
+//        	this.postRepository.save(post);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//        return null;
+//    }
+
 }

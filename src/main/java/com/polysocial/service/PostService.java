@@ -16,4 +16,6 @@ public interface PostService {
 
     List<String> saveFile(List<MultipartFile> fi) throws IOException;
 
+	PostDTO findById(Long postId);
+
 }
