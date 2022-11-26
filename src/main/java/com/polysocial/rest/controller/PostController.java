@@ -3,15 +3,13 @@ package com.polysocial.rest.controller;
 import com.polysocial.consts.PostAPI;
 
 import com.polysocial.dto.PostDTO;
+import com.polysocial.dto.PostFileDTO;
 import com.polysocial.dto.ResponseDTO;
-import com.polysocial.exception.PolySocialException;
 import com.polysocial.dto.ListPostDTO;
 import com.polysocial.service.PostService;
 import com.polysocial.utils.ValidateUtils;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,12 +52,27 @@ public class PostController {
             return ResponseEntity.ok(response);
         }
     }
-    
-    
-    @PostMapping(PostAPI.API_UPLOADFILE_POST)
-    public List<String> add(@RequestParam(value = "file", required = false) List<MultipartFile> fi) throws IOException {
-        return postService.saveFile(fi);
-    }
-    
 
+    
+    @PutMapping(PostAPI.API_UPDATE_POST)
+    public ResponseEntity update(@RequestBody PostDTO request) {
+        if (ValidateUtils.isNullOrEmpty(request.getContent())) {
+            ResponseDTO response = new ResponseDTO();
+            response.setStatus(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+        } else {
+            PostDTO response = postService.update(request);
+            return ResponseEntity.ok(response);
+        }
+    }
+
+    @DeleteMapping(PostAPI.API_DELETE_POST)
+    public ResponseEntity delete(@RequestBody PostDTO request) {
+      try{
+        PostDTO post =  postService.delete(request.getPostId());
+        return ResponseEntity.ok(post);
+      }catch(Exception e){
+        return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+    }
+    }
 }

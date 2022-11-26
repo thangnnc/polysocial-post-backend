@@ -26,7 +26,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PostDTO implements Serializable {
     
-    private Long postId;
+    private Long postId;    
     
     private String content;
 
@@ -35,5 +35,9 @@ public class PostDTO implements Serializable {
     private Long groupId;
     
     private Users user;
+
+    private List<String> listPath;
+    
+    private String type;
 
 }

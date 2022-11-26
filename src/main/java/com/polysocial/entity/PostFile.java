@@ -22,9 +22,9 @@ public class PostFile implements Serializable {
 
     private String type;
 
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
     
-    private Boolean isActive;
+    private Boolean isActive = true;
     
     private Long postId;
 
@@ -44,4 +44,12 @@ public class PostFile implements Serializable {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+
+    public PostFile( String url, String type, Long postId) {
+        this.url = url;
+        this.type = type;
+        this.postId = postId;
+    }
+    
 }

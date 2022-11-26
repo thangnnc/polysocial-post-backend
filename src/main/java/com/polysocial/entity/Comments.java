@@ -1,6 +1,7 @@
 package com.polysocial.entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -32,13 +33,15 @@ public class Comments implements Serializable{
 
     private String content;
 
-    private Boolean status;
+    private Boolean status = true;
 
-    private Date createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
     
     private Long postId;
     
     private Long userId;
+
+    private Long idReply;
 
     @ManyToOne
     @JoinColumn(name = "userId", insertable = false, updatable = false)

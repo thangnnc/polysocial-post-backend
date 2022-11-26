@@ -1,7 +1,8 @@
 package com.polysocial.service;
 
+import java.util.List;
+
 import com.polysocial.dto.CommentDTO;
-import com.polysocial.exception.PolySocialException;
 
 public interface CommentService {
 
@@ -10,5 +11,10 @@ public interface CommentService {
     CommentDTO findAllPage();
 
     CommentDTO save(CommentDTO dto);
+
+    CommentDTO update(CommentDTO dto) throws Exception;
     
+    List<CommentDTO> getCommentByPostId(Long postId);
+
+    CommentDTO replyComment(CommentDTO dto);
 }

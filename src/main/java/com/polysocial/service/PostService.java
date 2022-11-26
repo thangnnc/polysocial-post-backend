@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.polysocial.dto.ListPostDTO;
 import com.polysocial.dto.PostDTO;
+import com.polysocial.dto.PostFileDTO;
 
 public interface PostService {
 
@@ -14,8 +15,10 @@ public interface PostService {
 
     PostDTO save(PostDTO dto);
 
-    List<String> saveFile(List<MultipartFile> fi) throws IOException;
-
 	PostDTO findById(Long postId);
+    
+    PostDTO delete(Long postId);
+
+    PostDTO update(PostDTO dto);
 
 }
