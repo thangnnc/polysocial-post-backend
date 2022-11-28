@@ -87,4 +87,12 @@ public class PostController {
 
         }
     }
+    
+    @GetMapping(PostAPI.API_GET_POST_BY_GROUP)
+    public ResponseEntity getPostByGroup(@RequestParam("groupId") Long groupId, @RequestParam("page") Optional<Integer> page,
+            @RequestParam("limit") Optional<Integer> limit) {
+        ListPostDTO response = postService.findAllPageByGroup(groupId, page.orElse(0), limit.orElse(10));
+        return ResponseEntity.ok(response);
+    }
+
 }

@@ -13,6 +13,8 @@ public interface PostService {
 
     ListPostDTO findAllPage(Integer page, Integer limit);
 
+    ListPostDTO findAllPageByGroup(Long groupId, Integer page, Integer limit);
+
     PostDTO save(PostDTO dto);
 
 	PostDTO findById(Long postId);

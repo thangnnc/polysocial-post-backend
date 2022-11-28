@@ -21,4 +21,7 @@ public interface PostRepository extends JpaRepository<Posts, Long>{
 	@Transactional
 	@Query("update Posts p set p.status = 0 where p.postId = ?1")
 	void deletePost(Long postId);
+
+	@Query("Select p from Posts p where p.status = 1 and p.groupId =?1 order by p.createdDate DESC")
+	Page<Posts> findAllDESCGroup(Long groupId, Pageable pageable);
 }

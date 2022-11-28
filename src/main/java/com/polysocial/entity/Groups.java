@@ -1,13 +1,14 @@
 package com.polysocial.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,20 +28,29 @@ public class Groups implements Serializable {
 
     private String description;
 
-    private Boolean status;
+    private Boolean status = true;
+    
+    private String className;
 
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<Posts> posts;
+    private String avatar;
+    
 
-//    @JsonManagedReference
-//    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
-//    @ToString.Exclude
-//    private List<Exercises> exercises;
+    public Groups(String name, Long totalMember) {
+		this.name = name;
+		this.totalMember = totalMember;
+	}
 
+
+    public Groups(String name, Long totalMember, String description, String className) {
+        this.name = name;
+        this.totalMember = totalMember;
+        this.description = description;
+        this.className = className;
+    }
+    
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
