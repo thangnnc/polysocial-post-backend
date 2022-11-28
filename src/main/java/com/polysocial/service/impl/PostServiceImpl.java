@@ -128,11 +128,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDTO delete(Long postId) {
+    public void delete(Long postId) {
         postRepository.deletePost(postId);      
-        Posts post = postRepository.findById(postId).get();
-        PostDTO dto = modelMapper.map(post, PostDTO.class);
-        return dto;
     }
 
 
@@ -141,6 +138,14 @@ public class PostServiceImpl implements PostService {
         postFileRepository.deleteByPostId(dto.getPostId());
         return save(dto);
 
+    }
+
+
+    @Override
+    public PostDTO getOne(Long postId) {
+        Posts post = postRepository.findById(postId).get();
+        PostDTO dto = modelMapper.map(post, PostDTO.class);
+        return dto;
     }
 
 }

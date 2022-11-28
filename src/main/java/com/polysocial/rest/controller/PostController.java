@@ -13,12 +13,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.tomcat.util.http.parser.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +34,6 @@ public class PostController {
 
     @Autowired
     private PostService postService;
-
 
     @GetMapping(PostAPI.API_GET_POST)
     public ResponseEntity getPost(@RequestParam("page") Optional<Integer> page,
@@ -53,8 +54,7 @@ public class PostController {
         }
     }
 
-    
-    @PutMapping(PostAPI.API_UPDATE_POST)
+    @PutMapping(value= PostAPI.API_UPDATE_POST, consumes = "application/json")
     public ResponseEntity update(@RequestBody PostDTO request) {
         if (ValidateUtils.isNullOrEmpty(request.getContent())) {
             ResponseDTO response = new ResponseDTO();
@@ -67,12 +67,24 @@ public class PostController {
     }
 
     @DeleteMapping(PostAPI.API_DELETE_POST)
-    public ResponseEntity delete(@RequestBody PostDTO request) {
-      try{
-        PostDTO post =  postService.delete(request.getPostId());
-        return ResponseEntity.ok(post);
-      }catch(Exception e){
-        return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity delete(@RequestParam Long postId) {
+        try {
+            postService.delete(postId);
+            return ResponseEntity.ok("OK");
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+        }
     }
+
+    @GetMapping(PostAPI.API_GET_ONE_POST)
+    public ResponseEntity getOne(@RequestParam("postId") Long postId) {
+        try {
+            PostDTO response = postService.getOne(postId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.BAD_REQUEST.toString(), HttpStatus.BAD_REQUEST);
+
+        }
     }
 }

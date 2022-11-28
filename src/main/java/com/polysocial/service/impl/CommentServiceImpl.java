@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.polysocial.dto.CommentDTO;
 import com.polysocial.dto.CommentReplyDTO;
@@ -59,8 +62,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDTO> getCommentByPostId(Long postId) {
-        List<Comments> listComment = commentRepository.findByPostId(postId);
+    public List<CommentDTO> getCommentByPostId(Long postId, Optional<Integer> page, Optional<Integer> limit) {
+        Pageable pageable = PageRequest.of(page.orElse(0), limit.orElse(3));
+        Page<Comments> listComment = commentRepository.findByPostIdPage(postId, pageable);
         List<CommentDTO> listCommentDTO = new ArrayList<>();
         for (Comments comments : listComment) {
             CommentDTO commentDTO = modelMapper.map(comments, CommentDTO.class);
