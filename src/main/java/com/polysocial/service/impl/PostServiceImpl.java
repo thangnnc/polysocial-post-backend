@@ -186,7 +186,9 @@ public class PostServiceImpl implements PostService {
                 dto.setCountComment(countComment);
                 dto.setStatus(post.getStatus());
                 try{
-                    dto.setType(postFileRepository.findByPostId(post.getPostId()).get(0).getType());
+                   for(int i = 0 ; i < listUrl.size() ;i++){
+                      dto.getListUrl().get(i).setType(postFileRepository.findByPostId(post.getPostId()).get(i).getType());
+                   }
                 }catch(Exception e){
 
                 }

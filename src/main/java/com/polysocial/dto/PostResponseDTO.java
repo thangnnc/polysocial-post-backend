@@ -37,5 +37,4 @@ public class PostResponseDTO implements Serializable {
     
     private List<PostFileResponseDTO> listUrl;
 
-    private String type;
 }
