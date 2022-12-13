@@ -80,6 +80,13 @@ public class PostServiceImpl implements PostService {
                 dto.setCountLike(countLike);
                 dto.setCountComment(countComment);
                 dto.setStatus(post.getStatus());
+                try{
+                    for(int i = 0 ; i < listUrl.size() ;i++){
+                       dto.getListUrl().get(i).setType(postFileRepository.findByPostId(post.getPostId()).get(i).getType());
+                    }
+                 }catch(Exception e){
+ 
+                 }
                 listPostConver.add(dto);
 
             }
