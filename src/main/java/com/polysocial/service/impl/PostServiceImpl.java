@@ -102,6 +102,9 @@ public class PostServiceImpl implements PostService {
             Posts entity = postRepository.save(post);
             for(int i = 0; i< dto.getListPath().size(); i++) {
                 String type = dto.getListPath().get(i).substring(dto.getListPath().get(i).lastIndexOf(".") + 1);
+                if(type.contains("jpg") || type.contains("png") || type.contains("jpeg") || type.contains("gif")){
+                    type = "img";
+                }
                 PostFile file = new PostFile(dto.getListPath().get(i), type, entity.getPostId());
                 postFileRepository.save(file);
             }
