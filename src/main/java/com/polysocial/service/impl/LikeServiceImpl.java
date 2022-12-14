@@ -38,15 +38,15 @@ public class LikeServiceImpl implements LikeService {
                 likeExist.setStatus(!likeExist.getStatus());
                 likeRepository.save(likeExist);
             }
+            dto.setStatus(likeByUserPost.get().getStatus());
+          
+//            System.out.println("------"+likeByUserPost);
             return dto;
         } catch (Exception e) {
             throw new PolySocialException(PolySocialErrorCode.ERROR_MSG_POST_ID_NOT_FOUND);
         }
 
     }
-    
-//    public LikeDTO countLike(LikeDTO dto) {
-//        Likes count = likeRepository.countLike(dto.getPostId());
-//    }
+
 
 }

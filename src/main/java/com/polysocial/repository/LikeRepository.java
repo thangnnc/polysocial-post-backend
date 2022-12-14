@@ -1,5 +1,7 @@
 package com.polysocial.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.polysocial.entity.LikeId;
@@ -12,4 +14,9 @@ public interface LikeRepository extends JpaRepository<Likes, LikeId>{
     
     @Query("SELECT COUNT(*) FROM Likes l WHERE l.postId=:postId AND status=1")
     Long countLike(@Param("postId") Long postId);
+    
+    @Query(value = "SELECT u.studentCode, l.postId, l.status FROM Likes l\n"
+    		+ "  JOIN Users u on u.userId = l.userId\n"
+    		+ "  WHERE postId = ?1 AND status=1", nativeQuery = true)
+    List<Object[]>  findByPostId(Long postId);
 }

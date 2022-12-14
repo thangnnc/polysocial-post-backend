@@ -23,4 +23,5 @@ public class ListPostDTO  implements Serializable{
 
     private List<PostResponseDTO> listPostDTO;
     
+    
 }
