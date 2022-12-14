@@ -38,4 +38,5 @@ public class PostResponseDTO implements Serializable {
     private List<LikeResponseDTO> listLike;
     
     private List<PostFileResponseDTO> listUrl;
+
 }
