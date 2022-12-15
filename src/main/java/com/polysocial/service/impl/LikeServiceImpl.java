@@ -41,10 +41,11 @@ public class LikeServiceImpl implements LikeService {
             dto.setStatus(likeByUserPost.get().getStatus());
           
 //            System.out.println("------"+likeByUserPost);
-            return dto;
+//            return dto;
         } catch (Exception e) {
-            throw new PolySocialException(PolySocialErrorCode.ERROR_MSG_POST_ID_NOT_FOUND);
+         
         }
+		return dto;
 
     }
 
