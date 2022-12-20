@@ -73,6 +73,7 @@ public class PostServiceImpl implements PostService {
 					likeResponse.setStudentCode(objects[0].toString());
 					likeResponse.setPostId(Long.parseLong(objects[1].toString()));
 					likeResponse.setStatus(Boolean.parseBoolean(objects[2].toString()));
+					likeResponse.setUserId(Long.parseLong(objects[3].toString()));
 					listResponseDTO.add(likeResponse);
 				}
 				
