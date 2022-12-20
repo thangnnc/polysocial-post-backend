@@ -4,7 +4,6 @@ import com.polysocial.dto.CommentResponseDTO;
 import com.polysocial.dto.LikeResponseDTO;
 import com.polysocial.dto.ListPostDTO;
 import com.polysocial.dto.PostDTO;
-import com.polysocial.dto.PostFileDTO;
 import com.polysocial.dto.PostFileResponseDTO;
 import com.polysocial.dto.PostResponseDTO;
 import com.polysocial.entity.Comments;
@@ -49,14 +48,10 @@ public class PostServiceImpl implements PostService {
 	@Autowired
 	PostFileRepository postFileRepository;
 
-<<<<<<< Updated upstream
-	@Override
-=======
     @Autowired
     private UserRepo userRepo;
 
     @Override
->>>>>>> Stashed changes
 	public ListPostDTO findAllPage(Integer page, Integer limit) {
 		ListPostDTO listPostDTO = new ListPostDTO();
 		Pageable pageable = PageRequest.of(page, limit);
@@ -148,82 +143,7 @@ public class PostServiceImpl implements PostService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-<<<<<<< Updated upstream
-		return null;
-	}
 
-	@Override
-	public void delete(Long postId) {
-		postRepository.deletePost(postId);
-	}
-
-	@Override
-	public PostDTO update(PostDTO dto) {
-		postFileRepository.deleteByPostId(dto.getPostId());
-		return save(dto);
-
-	}
-
-	@Override
-	public PostDTO getOne(Long postId) {
-		Posts post = postRepository.findById(postId).get();
-		PostDTO dto = modelMapper.map(post, PostDTO.class);
-		return dto;
-	}
-
-	@Override
-	public ListPostDTO findAllPageByGroup(Long groupId, Integer page, Integer limit) {
-		ListPostDTO listPostDTO = new ListPostDTO();
-		Pageable pageable = PageRequest.of(page, limit);
-		Page<Posts> pagePost = this.postRepository.findAllDESCGroup(groupId, pageable);
-		List<Posts> listPost = pagePost.getContent();
-
-		if (listPost.size() > 0) {
-			List<PostResponseDTO> listPostConver = new ArrayList<>();
-			for (Posts post : listPost) {
-				List<Comments> cm = commentRepository.findByPostId(post.getPostId());
-				List<PostFile> pf = postFileRepository.findByPostId(post.getPostId());
-
-				PostResponseDTO dto = modelMapper.map(post, PostResponseDTO.class);
-
-				List<CommentResponseDTO> listCommentConver = new ArrayList<>();
-
-				for (Comments comments : cm) {
-					CommentResponseDTO cmt = modelMapper.map(comments, CommentResponseDTO.class);
-					listCommentConver.add(cmt);
-				}
-				List<PostFileResponseDTO> listUrl = new ArrayList<>();
-				for (PostFile postFile : pf) {
-					PostFileResponseDTO pfres = modelMapper.map(postFile, PostFileResponseDTO.class);
-					listUrl.add(pfres);
-				}
-				dto.setListUrl(listUrl);
-				Long countLike = likeRepository.countLike(post.getPostId());
-				Long countComment = commentRepository.countComment(post.getPostId());
-				dto.setListComment(listCommentConver);
-				dto.setCountLike(countLike);
-				dto.setCountComment(countComment);
-				dto.setStatus(post.getStatus());
-				try {
-					for (int i = 0; i < listUrl.size(); i++) {
-						dto.getListUrl().get(i)
-								.setType(postFileRepository.findByPostId(post.getPostId()).get(i).getType());
-					}
-				} catch (Exception e) {
-
-				}
-				listPostConver.add(dto);
-
-			}
-			listPostDTO.setListPostDTO(listPostConver);
-
-		}
-		listPostDTO.setTotalPage((int) Math.ceil((double) (pagePost.getTotalElements()) / limit));
-		listPostDTO.setTotalItem((int) pagePost.getTotalElements());
-		listPostDTO.setPage(page);
-		return listPostDTO;
-	}
-=======
     	return null;
     }
 
@@ -306,6 +226,5 @@ public class PostServiceImpl implements PostService {
         listPostDTO.setPage(page);
         return listPostDTO;
     }
->>>>>>> Stashed changes
 
 }
