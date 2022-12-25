@@ -11,7 +11,7 @@
     <groupId>com</groupId>
     <artifactId>polysocial-post-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>polysocial-demo-backend</name>
     <description>polysocial-post-backend</description>
     <properties>
