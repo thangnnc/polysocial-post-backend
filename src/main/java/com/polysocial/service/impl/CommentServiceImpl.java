@@ -56,8 +56,19 @@ public class CommentServiceImpl implements CommentService {
         if (!comment.isPresent()) {
             throw new PolySocialException(PolySocialErrorCode.ERROR_MSG_POST_ID_NOT_FOUND);
         }
-        comment.get().setStatus(false);
-        commentRepository.delete(comment.get());
+       
+        List<Comments> list = commentRepository.findByCmtId(id);
+        if (list.size() > 0) {
+            for (Comments comments : list) {
+                commentRepository.delete(comments);
+            }
+            commentRepository.delete(comment.get());
+        }else{
+            comment.get().setStatus(false);
+            commentRepository.delete(comment.get());
+        }
+
+
         return null;
     }
 
