@@ -1,5 +1,7 @@
 package com.polysocial.service.impl;
 
+import com.polysocial.dto.CommentDTO;
+import com.polysocial.dto.CommentReplyDTO;
 import com.polysocial.dto.CommentResponseDTO;
 import com.polysocial.dto.LikeResponseDTO;
 import com.polysocial.dto.ListPostDTO;
@@ -48,10 +50,10 @@ public class PostServiceImpl implements PostService {
 	@Autowired
 	PostFileRepository postFileRepository;
 
-    @Autowired
-    private UserRepo userRepo;
+	@Autowired
+	private UserRepo userRepo;
 
-    @Override
+	@Override
 	public ListPostDTO findAllPage(Integer page, Integer limit) {
 		ListPostDTO listPostDTO = new ListPostDTO();
 		Pageable pageable = PageRequest.of(page, limit);
@@ -61,7 +63,7 @@ public class PostServiceImpl implements PostService {
 		if (listPost.size() > 0) {
 			List<PostResponseDTO> listPostConver = new ArrayList<>();
 			for (Posts post : listPost) {
-				
+
 				List<Comments> cm = commentRepository.findByPostId(post.getPostId());
 				List<PostFile> pf = postFileRepository.findByPostId(post.getPostId());
 				List<Object[]> l = likeRepository.findByPostId(post.getPostId());
@@ -76,11 +78,14 @@ public class PostServiceImpl implements PostService {
 					likeResponse.setUserId(Long.parseLong(objects[3].toString()));
 					listResponseDTO.add(likeResponse);
 				}
-				
-				List<CommentResponseDTO> listCommentConver = new ArrayList<>();
 
+				List<CommentResponseDTO> listCommentConver = new ArrayList<>();
 				for (Comments comments : cm) {
 					CommentResponseDTO cmt = modelMapper.map(comments, CommentResponseDTO.class);
+					List<Comments> list = commentRepository.findByCmtId(comments.getCmtId());
+					cmt.setCommentReplies(
+							list.stream().map(comment -> modelMapper.map(comment, CommentReplyDTO.class))
+									.collect(Collectors.toList()));
 					listCommentConver.add(cmt);
 				}
 				List<PostFileResponseDTO> listUrl = new ArrayList<>();
@@ -145,87 +150,87 @@ public class PostServiceImpl implements PostService {
 			e.printStackTrace();
 		}
 
-    	return null;
-    }
+		return null;
+	}
 
-    @Override
-    public void delete(Long postId) {
-        postRepository.deletePost(postId);      
-    }
+	@Override
+	public void delete(Long postId) {
+		postRepository.deletePost(postId);
+	}
 
+	@Override
+	public PostDTO update(PostDTO dto) {
+		postFileRepository.deleteByPostId(dto.getPostId());
+		return save(dto);
 
-    @Override
-    public PostDTO update(PostDTO dto) {
-        postFileRepository.deleteByPostId(dto.getPostId());
-        return save(dto);
+	}
 
-    }
+	@Override
+	public PostDTO getOne(Long postId) {
+		Posts post = postRepository.findById(postId).get();
+		PostDTO dto = modelMapper.map(post, PostDTO.class);
+		return dto;
+	}
 
+	@Override
+	public ListPostDTO findAllPageByGroup(Long groupId, Integer page, Integer limit) {
+		ListPostDTO listPostDTO = new ListPostDTO();
+		Pageable pageable = PageRequest.of(page, limit);
+		Page<Posts> pagePost = this.postRepository.findAllDESCGroup(groupId, pageable);
+		List<Posts> listPost = pagePost.getContent();
 
-    @Override
-    public PostDTO getOne(Long postId) {
-        Posts post = postRepository.findById(postId).get();
-        PostDTO dto = modelMapper.map(post, PostDTO.class);
-        return dto;
-    }
+		if (listPost.size() > 0) {
+			List<PostResponseDTO> listPostConver = new ArrayList<>();
+			for (Posts post : listPost) {
+				List<Comments> cm = commentRepository.findByPostId(post.getPostId());
+				List<PostFile> pf = postFileRepository.findByPostId(post.getPostId());
 
+				PostResponseDTO dto = modelMapper.map(post, PostResponseDTO.class);
 
-    @Override
-    public ListPostDTO findAllPageByGroup(Long groupId, Integer page, Integer limit) {
-        ListPostDTO listPostDTO = new ListPostDTO();
-        Pageable pageable = PageRequest.of(page, limit);
-        Page<Posts> pagePost = this.postRepository.findAllDESCGroup(groupId,pageable);
-        List<Posts> listPost = pagePost.getContent();
+				List<CommentResponseDTO> listCommentConver = new ArrayList<>();
 
-        if (listPost.size() > 0) {
-            List<PostResponseDTO> listPostConver = new ArrayList<>();
-            for (Posts post : listPost) {
-                List<Comments> cm = commentRepository.findByPostId(post.getPostId());
-                List<PostFile> pf = postFileRepository.findByPostId(post.getPostId());
-             
-                PostResponseDTO dto = modelMapper.map(post, PostResponseDTO.class);
-                
-                List<CommentResponseDTO> listCommentConver = new ArrayList<>();
-                
-                for (Comments comments : cm) {
-                    CommentResponseDTO cmt = modelMapper.map(comments, CommentResponseDTO.class);
-                    listCommentConver.add(cmt);
-                }
-                List<PostFileResponseDTO> listUrl = new ArrayList<>();
-                for (PostFile postFile : pf) {
-                    PostFileResponseDTO pfres = modelMapper.map(postFile, PostFileResponseDTO.class);
-                    listUrl.add(pfres);
-                }
-                dto.setListUrl(listUrl);
-                Long countLike = likeRepository.countLike(post.getPostId());
-                Long countComment = commentRepository.countComment(post.getPostId());
-                dto.setListComment(listCommentConver);
-                dto.setCountLike(countLike);
-                dto.setCountComment(countComment);
-                dto.setStatus(post.getStatus());
-                List<Likes> listLike = likeRepository.findPostByPostId(post.getPostId());
-                List<LikeResponseDTO> listResponseDTO = listLike.stream().map(item -> modelMapper.map(item, LikeResponseDTO.class)).collect(Collectors.toList());
-                for (LikeResponseDTO likeResponseDTO : listResponseDTO) {
-                    likeResponseDTO.setStudentCode(userRepo.findById(likeResponseDTO.getUserId()).get().getStudentCode());
-                }
-                dto.setListLike(listResponseDTO);
-                try{
-                   for(int i = 0 ; i < listUrl.size() ;i++){
-                      dto.getListUrl().get(i).setType(postFileRepository.findByPostId(post.getPostId()).get(i).getType());
-                   }
-                }catch(Exception e){
+				for (Comments comments : cm) {
+					CommentResponseDTO cmt = modelMapper.map(comments, CommentResponseDTO.class);
+					listCommentConver.add(cmt);
+				}
+				List<PostFileResponseDTO> listUrl = new ArrayList<>();
+				for (PostFile postFile : pf) {
+					PostFileResponseDTO pfres = modelMapper.map(postFile, PostFileResponseDTO.class);
+					listUrl.add(pfres);
+				}
+				dto.setListUrl(listUrl);
+				Long countLike = likeRepository.countLike(post.getPostId());
+				Long countComment = commentRepository.countComment(post.getPostId());
+				dto.setListComment(listCommentConver);
+				dto.setCountLike(countLike);
+				dto.setCountComment(countComment);
+				dto.setStatus(post.getStatus());
+				List<Likes> listLike = likeRepository.findPostByPostId(post.getPostId());
+				List<LikeResponseDTO> listResponseDTO = listLike.stream()
+						.map(item -> modelMapper.map(item, LikeResponseDTO.class)).collect(Collectors.toList());
+				for (LikeResponseDTO likeResponseDTO : listResponseDTO) {
+					likeResponseDTO
+							.setStudentCode(userRepo.findById(likeResponseDTO.getUserId()).get().getStudentCode());
+				}
+				dto.setListLike(listResponseDTO);
+				try {
+					for (int i = 0; i < listUrl.size(); i++) {
+						dto.getListUrl().get(i)
+								.setType(postFileRepository.findByPostId(post.getPostId()).get(i).getType());
+					}
+				} catch (Exception e) {
 
-                }
-                listPostConver.add(dto);
+				}
+				listPostConver.add(dto);
 
-            }
-            listPostDTO.setListPostDTO(listPostConver);
+			}
+			listPostDTO.setListPostDTO(listPostConver);
 
-        }
-        listPostDTO.setTotalPage((int) Math.ceil((double) (pagePost.getTotalElements()) / limit));
-        listPostDTO.setTotalItem((int) pagePost.getTotalElements());
-        listPostDTO.setPage(page);
-        return listPostDTO;
-    }
+		}
+		listPostDTO.setTotalPage((int) Math.ceil((double) (pagePost.getTotalElements()) / limit));
+		listPostDTO.setTotalItem((int) pagePost.getTotalElements());
+		listPostDTO.setPage(page);
+		return listPostDTO;
+	}
 
 }
